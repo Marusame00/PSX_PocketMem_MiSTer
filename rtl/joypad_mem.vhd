@@ -166,7 +166,6 @@ architecture arch of joypad_mem is
    -- PocketStation state
    signal dirIndex      : std_logic_vector(15 downto 0) := (others => '0');
    signal comFlags      : std_logic_vector(15 downto 0) := (others => '0');
-   signal execParam     : std_logic_vector(31 downto 0) := (others => '0');
    signal dirNewHi      : std_logic_vector(7 downto 0) := (others => '0');
    signal psFunc        : std_logic_vector(7 downto 0) := (others => '0');
    signal psDirIn       : std_logic := '0';   -- '1' = 5Ch (PSX to PocketStation)
@@ -448,10 +447,10 @@ begin
                            if (dirNewHi = x"00" and transmitValue(7 downto 4) = "0000") then
                               dirIndex <= x"00" & transmitValue;
                            end if;
-                        when PS59_P0 => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"00"; state <= PS59_P1; execParam(7 downto 0)   <= transmitValue;
-                        when PS59_P1 => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"00"; state <= PS59_P2; execParam(15 downto 8)  <= transmitValue;
-                        when PS59_P2 => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"00"; state <= PS59_P3; execParam(23 downto 16) <= transmitValue;
-                        when PS59_P3 => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"00"; state <= IDLE;   execParam(31 downto 24) <= transmitValue;
+                        when PS59_P0 => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"00"; state <= PS59_P1;
+                        when PS59_P1 => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"00"; state <= PS59_P2;
+                        when PS59_P2 => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"00"; state <= PS59_P3;
+                        when PS59_P3 => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"00"; state <= IDLE;
 
                         -- 5Ah: 12h length, then 18 bytes of status
                         when PS5A_LEN => ack <= '1'; receiveValid <= '1'; receiveBuffer <= x"12"; psCnt <= (others => '0'); state <= PS5A_DATA;
