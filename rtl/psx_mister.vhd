@@ -140,7 +140,10 @@ entity psx_mister is
       memcard1_dataIn       : in  std_logic_vector(15 downto 0);
       memcard1_dataOut      : out std_logic_vector(15 downto 0);
       memcard2_mounted      : in  std_logic;               
-      memcard2_available    : in  std_logic;               
+      memcard2_available    : in  std_logic;
+      isPocketStation1      : in  std_logic := '0';
+      isPocketStation2      : in  std_logic := '0';
+      rtc_in                : in  std_logic_vector(64 downto 0) := (others => '0');               
       memcard2_rd           : out std_logic := '0';
       memcard2_wr           : out std_logic := '0';
       memcard2_lba          : out std_logic_vector(6 downto 0);
@@ -434,6 +437,9 @@ begin
       memcard1_dataOut      => memcard1_dataOut,   
       memcard2_mounted      => memcard2_mounted, 
       memcard2_available    => memcard2_available, 
+      isPocketStation1      => isPocketStation1,
+      isPocketStation2      => isPocketStation2,
+      rtc_in                => rtc_in,
       memcard2_rd           => memcard2_rd,        
       memcard2_wr           => memcard2_wr,        
       memcard2_lba          => memcard2_lba,       

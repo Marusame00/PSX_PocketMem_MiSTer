@@ -33,6 +33,9 @@ entity joypad is
 
       memcard1_available   : in  std_logic;
       memcard2_available   : in  std_logic;
+      isPocketStation1     : in  std_logic := '0';   -- slot 1 card is a PocketStation
+      isPocketStation2     : in  std_logic := '0';   -- slot 2 card is a PocketStation
+      rtc_in               : in  std_logic_vector(64 downto 0) := (others => '0');
       
       irqRequest           : out std_logic := '0';
       
@@ -456,6 +459,8 @@ begin
       reset                => reset,    
        
       memcard_available    => memcard1_available,
+      isPocketStation      => isPocketStation1,
+      rtc_in               => rtc_in,
       mem_request          => mem1_request,   
       mem_BURSTCNT         => mem1_BURSTCNT,  
       mem_ADDR             => mem1_ADDR,      
@@ -490,6 +495,8 @@ begin
       reset                => reset,    
       
       memcard_available    => memcard2_available,
+      isPocketStation      => isPocketStation2,
+      rtc_in               => rtc_in,
       mem_request          => mem2_request,   
       mem_BURSTCNT         => mem2_BURSTCNT,  
       mem_ADDR             => mem2_ADDR,      

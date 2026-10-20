@@ -212,6 +212,8 @@ parameter CONF_STR = {
 	"O[71],Save to SDCard,On Open OSD,Manual;",
 	"SC2,SAVMCD,Mount Memory Card 1;",
 	"SC3,SAVMCD,Mount Memory Card 2;",
+	"O[65],Memory Card 1 Type,Standard,PocketStation;",
+	"O[58],Memory Card 2 Type,Standard,PocketStation;",
 	"O[63],Automount Memory Card 1,Yes,No;",
 	"-;",
 	"O[36],Savestates to SDCard,On,Off;",
@@ -382,6 +384,9 @@ wire [15:0] joystick2_rumble;
 wire [15:0] joystick3_rumble;
 wire [15:0] joystick4_rumble;
 wire [32:0] RTC_time;
+wire [64:0] RTC_host;             // MSM6242B-style BCD clock from hps_io (PocketStation uses the same bus)
+wire        isPocketStation1 = status[65];   // OSD: Memory Card 1 Type
+wire        isPocketStation2 = status[58];   // OSD: Memory Card 2 Type
 
 wire filter_on = (status[82:81] == 2'b00) ? 1'b0 : 1'b1;
 
@@ -431,6 +436,7 @@ hps_io #(.CONF_STR(CONF_STR), .WIDE(1), .VDNUM(4), .BLKSZ(3)) hps_io
 	.sd_buff_din('{0, 0, sd_buff_din2, sd_buff_din3}),
 	.sd_buff_wr(sd_buff_wr),
 
+	.RTC(RTC_host),
 	.TIMESTAMP(RTC_time),
 
 	.img_mounted(img_mounted),
@@ -1031,6 +1037,9 @@ psx
    .memcard1_dataOut(sd_buff_din2),
    .memcard2_mounted   (sd_mounted3),
    .memcard2_available (memcard2_inserted),
+   .isPocketStation1   (isPocketStation1),
+   .isPocketStation2   (isPocketStation2),
+   .rtc_in             (RTC_host),
    .memcard2_rd     (sd_rd[3]),
    .memcard2_wr     (sd_wr[3]),
    .memcard2_lba    (sd_lba3),
