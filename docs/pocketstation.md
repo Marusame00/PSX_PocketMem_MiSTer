@@ -1,6 +1,6 @@
 # PocketStation support (PSX_MiSTer)
 
-Status: **v1, RTL + simulation only.** Not yet built with Quartus and not yet run on hardware.
+Status: **v1.** RTL + GHDL simulation; built with Quartus Prime Lite and smoke-tested on hardware (FF8 / Chocobo World). See "Hardware test results" and "Known limitations" below.
 
 ## What it does
 
@@ -104,13 +104,26 @@ Last result: 1663 byte exchanges, 0 errors (GHDL 6.0.0, mcode).
 
 Covers: standard regression (57h/52h round trip, 53h/58h/5Bh ignored), PocketStation 53h/58h/50h/59h/5Ah/5Eh/5Fh/5Bh FUNC 00h and 01h, write/read round trip, ComFlags.10 write-protect (sector 20 unchanged, sector 60 writable), bad checksum (sector unchanged).
 
-## Not verified / limitations
+## Hardware test results (real MiSTer, FF8 US / Chocobo World)
 
-- **No Quartus build.** Not run on this machine (Quartus is not installed; no Verilog simulator either). `PSX.sv` and `psx_top.vhd` are unbuilt.
-- **`psx_top.vhd` and `psx_mister.vhd` are not analyzed.** Only a syntax-level check is possible without the full `mem` and `pexport` packages. `joypad.vhd` analyzes and elaborates with GHDL.
-- **No hardware test.** Use a backup of `/media/fat/_console/PSX.rbf` before loading a test build. Suggested game: FF8 (US/JP), Chocobo World.
-- **No minigame execution.** That needs ARM7 emulation (PocketStation_MiSTer's job).
+Tested with a build of this branch (Quartus Prime Lite 17.0.0, Cyclone V, PSX.rbf):
+
+- Standard card behaviour unchanged: normal saves/loads worked before and after the new OSD options.
+- FF8 (SLUS-00892) with **Memory Card 2 Type = PocketStation** and a Chocobo World file on the card:
+  - FF8 detects the PocketStation and offers to send the chicobo; the transfer completes.
+  - Byte-level check of the resulting 128 KB image: the CW file's directory entry and executable sectors are unchanged; only its save-data region was modified in place, i.e. FF8 performed real read-modify-write transactions through the PocketStation BU command path (5Ah/59h/5Bh/5Dh and 52h/57h with checksums).
+  - The PocketStation core booted the file FF8 wrote; the transferred data was visible on the PocketStation side.
+- Not yet working end to end: returning the chicobo to FF8. See limitations below.
+
+## Known limitations / open items
+
+- **No device-state continuity across a core switch.** A real PocketStation stays powered and keeps `dir_index`, ComFlags and kernel state between docking sessions. This implementation resets them when the core reloads, and a FF8 reunion check can fail after switching cores. Making this state persist (e.g. into the savestate region or the card image) is the main open item for full Chocobo World round trips.
+- **F_SN (serial number) reads as 0000h.** Device-identification via 5Ah returns zeros.
 - FUNC 01h/02h/03h/80h+ data is not emulated. FDh (exec-file directory protection) and FFFEh dir_index are not emulated.
-- F_SN bytes in 5Ah are zero.
-- Century in 5Ah and date data is hardcoded to 20h for the year.
-- The OSD type is sampled per command. Switching it mid-session takes effect on the next command; dir_index and ComFlags persist until a core reset.
+- No minigame execution here by design: that is the PocketStation core's job. This core only presents a card that behaves like a PocketStation at the SIO protocol level.
+
+## Development note
+
+This feature was developed with AI assistance (interactive RTL/simulation pair-programming): protocol analysis against the no$psx BU command documentation, the joypad_mem state machine, the GHDL testbench, and the OSD/wiring changes. All hardware testing and validation was done by the submitter on a real MiSTer.
+
+
