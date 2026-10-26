@@ -7,13 +7,22 @@
 > full protocol details, and [docs/bridge_attempt.md](docs/bridge_attempt.md) for the history
 > of an attempted full PocketStation-core bridge.
 
-## PocketStation Memory-Card Support
+## PocketStation Memory-Card Support (partial)
+
 This fork lets a **PocketStation save image** be mounted as a PSX memory card, with the
 card responding to the PocketStation BU command set — so games that check for a
 PocketStation (Final Fantasy VIII's Chocobo World, Dokodemo Issho, etc.) **detect the card
 and can download data to it**. The card's flash is a raw 128 KB image, interoperable with
 the [PocketStation_MiSTer](https://github.com/MiSTer-devel/PocketStation_MiSTer) core's
 saves.
+
+**Partial support — known limits:** this is a *card protocol* implementation, not a full
+PocketStation. Because no PocketStation CPU/kernel is running behind the card, a game
+send (e.g. FF8's "send to PocketStation") goes to a passive unit: the data is written to
+the card image but the transfer handshake never completes, so the game may hang on the
+"send" and the data is not "retrievable" the way it would be with a live PocketStation or
+physical hardware over SNAC. Detection, download-from-existing-saves, and save-image
+interop work; live send/receive round trips do not.
 
 - Per-slot control: OSD `O[65]` (Memory Card 1 Type) and `O[58]` (Memory Card 2 Type),
   `Standard` / `PocketStation`.
