@@ -1,5 +1,28 @@
 # [Playstation](https://en.wikipedia.org/wiki/PlayStation_(console)) for [MiSTer Platform](https://github.com/MiSTer-devel/Main_MiSTer/wiki)
 
+> **Fork notice:** This is a fork of [MiSTer-devel/PSX_MiSTer](https://github.com/MiSTer-devel/PSX_MiSTer)
+> adding **PocketStation memory-card emulation** (see below). It is not the upstream core;
+> upstream is at the link above)Skip. This fork adds a PocketStation memory-card mode and is
+> otherwise a standard PSX core. See [docs/pocketstation.md](docs/pocketstation.md) for the
+> full protocol details, and [docs/bridge_attempt.md](docs/bridge_attempt.md) for the history
+> of an attempted full PocketStation-core bridge.
+
+## PocketStation Memory-Card Support
+This fork lets a **PocketStation save image** be mounted as a PSX memory card, with the
+card responding to the PocketStation BU command set — so games that check for a
+PocketStation (Final Fantasy VIII's Chocobo World, Dokodemo Issho, etc.) **detect the card
+and can download data to it**. The card's flash is a raw 128 KB image, interoperable with
+the [PocketStation_MiSTer](https://github.com/MiSTer-devel/PocketStation_MiSTer) core's
+saves.
+
+- Per-slot control: OSD `O[65]` (Memory Card 1 Type) and `O[58]` (Memory Card 2 Type),
+  `Standard` / `PocketStation`.
+- The PocketStation mode implements the card's BU command set on top of the normal
+  memory-card read/write path.
+- Caution: this is **card emulation only** — it does not emulate the PocketStation's ARM7
+  CPU. Minigame *execution* (actually running Chocobo World) still requires the separate
+  PocketStation core or physical hardware over SNAC.
+
 ## Hardware Requirements
 SDRAM of any size is required.
 
