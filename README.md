@@ -4,7 +4,7 @@
 > adding **PocketStation memory-card emulation** (see below). It is not the upstream core;
 > upstream is at the link above)Skip. This fork adds a PocketStation memory-card mode and is
 > otherwise a standard PSX core. See [docs/pocketstation.md](docs/pocketstation.md) for the
-> full protocol details, and [docs/bridge_attempt.md](docs/bridge_attempt.md) for the history
+> full protocol details, and [archive/docs/bridge_attempt.md](archive/docs/bridge_attempt.md) for the history
 > of an attempted full PocketStation-core bridge.
 
 ## PocketStation Memory-Card Support (partial)
