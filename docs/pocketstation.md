@@ -122,6 +122,14 @@ Tested with a build of this branch (Quartus Prime Lite 17.0.0, Cyclone V, PSX.rb
 - FUNC 01h/02h/03h/80h+ data is not emulated. FDh (exec-file directory protection) and FFFEh dir_index are not emulated.
 - No minigame execution here by design: that is the PocketStation core's job. This core only presents a card that behaves like a PocketStation at the SIO protocol level.
 
+## AI Assistance Disclosure
+
+This PocketStation memory-card feature was developed with **substantial AI assistance**:
+protocol analysis against the no$psx BU command documentation, the `joypad_mem` PocketStation
+state machine, the GHDL simulation/testbench, and the OSD/wiring changes were produced with
+interactive AI pair-programming. **All hardware testing and validation was done by the
+submitter on a real MiSTer.**
+
 ## Development note
 
 This feature was developed with AI assistance (interactive RTL/simulation pair-programming): protocol analysis against the no$psx BU command documentation, the joypad_mem state machine, the GHDL testbench, and the OSD/wiring changes. All hardware testing and validation was done by the submitter on a real MiSTer.

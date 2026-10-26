@@ -23,6 +23,13 @@ saves.
   CPU. Minigame *execution* (actually running Chocobo World) still requires the separate
   PocketStation core or physical hardware over SNAC.
 
+## AI Assistance Disclosure
+
+This fork's PocketStation memory-card work was developed with **substantial AI assistance**
+(RTL, simulation, protocol analysis); all hardware testing and validation was done by the
+submitter on a real MiSTer. See [docs/pocketstation.md](docs/pocketstation.md) for the full
+disclosure.
+
 ## Hardware Requirements
 SDRAM of any size is required.
 
